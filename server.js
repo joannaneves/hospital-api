@@ -9,14 +9,14 @@ const stripe = new Stripe(
 
 app.use(
   cors({
-    origin: "http://localhost:8080", // Permitir apenas requisições do frontend
+    origin: "http://localhost:8080",
   })
 )
 app.use(express.json())
 
 // Simulando um banco de dados para pacientes e receitas
 let patients = []
-let recipes = [] // Array para armazenar receitas
+let recipes = []
 
 // Endpoint para criar o Payment Intent no Stripe
 app.post("/create-payment-intent", async (req, res) => {
@@ -29,8 +29,8 @@ app.post("/create-payment-intent", async (req, res) => {
     }
 
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount * 100, // Conversão para centavos
-      currency: currency || "brl", // Padrão para BRL
+      amount: amount * 100,
+      currency: currency || "brl",
     })
 
     res.status(200).send({
