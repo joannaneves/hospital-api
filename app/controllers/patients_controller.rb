@@ -1,5 +1,5 @@
 class PatientsController < ApplicationController
-  before_action :set_patient, only: [:show, :update, :destroy]
+  before_action :set_patient, only: [ :show, :update, :destroy ]
 
   # GET /patients
   def index
@@ -24,16 +24,19 @@ class PatientsController < ApplicationController
 
   # PATCH/PUT /patients/:id
   def update
-    if @patient.update(patient_params)
-      render json: @patient
+    patient = Patient.find(params[:id])
+    if patient.update(patient_params)
+      render json: patient
     else
-      render json: @patient.errors, status: :unprocessable_entity
+      render json: { error: patient.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
   # DELETE /patients/:id
   def destroy
-    @patient.destroy
+    patient = Patient.find(params[:id])
+    patient.destroy
+    render json: { message: "Paciente excluído com sucesso" }
   end
 
   private
