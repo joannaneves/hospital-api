@@ -1,5 +1,5 @@
 class PatientsController < ApplicationController
-  before_action :set_patient, only: [ :show, :update, :destroy ]
+  before_action :set_patient, only: [ :show, :update, :destroy, :create_recipe, :list_recipes ]
 
   # GET /patients
   def index
@@ -39,6 +39,22 @@ class PatientsController < ApplicationController
     render json: { message: "Paciente excluído com sucesso" }
   end
 
+  # GET /patients/:id/recipes
+  def list_recipes
+    @recipes = @patient.recipes
+    render json: @recipes
+  end
+
+  # POST /patients/:id/recipes
+  def create_recipe
+    @recipe = @patient.recipes.new(recipe_params)
+    if @recipe.save
+      render json: @recipe, status: :created
+    else
+      render json: @recipe.errors, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def set_patient
@@ -46,6 +62,6 @@ class PatientsController < ApplicationController
   end
 
   def patient_params
-    params.require(:patient).permit(:name, :age, :condition)
+    params.require(:patient).permit(:name, :age, :condition, :recipe)
   end
 end
